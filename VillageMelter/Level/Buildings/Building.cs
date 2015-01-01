@@ -14,7 +14,7 @@ namespace VillageMelter.Level.Buildings
 
         public abstract BuildingInstance CreateInstance(int x, int y, Rotation orientation);
 
-        public abstract bool CanPlace(Level level, Rectangle rect);
+        public abstract bool CanPlace(World level, Rectangle rect);
 
         public abstract Texture2D GetBuildingTexture();
 

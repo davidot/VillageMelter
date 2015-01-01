@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace VillageMelter.Level.Terrain
+namespace VillageMelter.Level.Terrains
 {
     public abstract class Terrain
     {

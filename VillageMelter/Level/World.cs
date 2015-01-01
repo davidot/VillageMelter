@@ -9,10 +9,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 using VillageMelter.Level.Buildings;
+using VillageMelter.Level.Terrains;
+using Microsoft.Xna.Framework.Content;
 
 namespace VillageMelter.Level
 {
-    public class Level
+    public class World
     {
 
         public const int TerrainSize = 4;
@@ -64,7 +66,7 @@ namespace VillageMelter.Level
             }
         }
 
-        public Level(int width, int height)
+        public World(int width, int height,VillageMelter game)
         {
             this._width = width;
             this._height = height;
@@ -85,7 +87,14 @@ namespace VillageMelter.Level
                     terrains[DataIndex][x, y] = rand.Next(2);
                 }
             }
-            LoadContent();
+            LoadContent(game);
+        }
+
+        ContentManager _contentManager;
+        public void LoadContent(VillageMelter game)
+        {
+            _contentManager = game.CreateNewContentManager();
+            test = new TextureBuilding(_contentManager, "image/cityHall");
         }
 
         public Terrain GetTerrain(int x, int y)
@@ -155,7 +164,7 @@ namespace VillageMelter.Level
             {
                 if(renderRect.Intersects(building))
                 {
-                    //todo render building
+                    spriteBatch.Draw(building.GetImage(), new Rectangle(building.X - xScroll,building.Y - yScroll,building.Bounds.Width,building.Bounds.Height), Color.White);
                 }
             }
 
@@ -187,7 +196,10 @@ namespace VillageMelter.Level
                 Point p = handler.MousePosition();
                 int xPos = p.X / (TerrainSize * Zoom) - xScroll;
                 int yPos = p.Y / (TerrainSize * Zoom) - yScroll;
-                
+                Rotation r = (Rotation)new Random().Next(4);
+                Rectangle placeRect = test.GetSize().Rotate(r).CreateRectangle(xPos,yPos);
+                if(test.CanPlace(this,placeRect))
+                    Add(test.CreateInstance(xPos, xPos,r));
             }
             int scrollWheel = handler.ScrollWheelDifference();
             if (scrollWheel > 0)
@@ -204,9 +216,7 @@ namespace VillageMelter.Level
 
         public void Center(Point point, Size renderSize)
         {
-
-
-
+            //todo
         }
 
         public void Add(BuildingInstance b)
@@ -216,7 +226,7 @@ namespace VillageMelter.Level
 
 
 
-        public bool HasTerrainType(Terrain search, Rectangle rect)
+        public bool HasTerrainType(Terrains.Terrain search, Rectangle rect)
         {
             for (int x = rect.X; x < rect.X + rect.Width; x++)
             {

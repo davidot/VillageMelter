@@ -23,9 +23,8 @@ namespace VillageMelter.Base
             private set;
         }
 
-        public Size(Microsoft.Xna.Framework.Graphics.Texture2D texture)
+        public Size(Microsoft.Xna.Framework.Graphics.Texture2D texture) : this(texture.Width, texture.Height)
         {
-            this(texture.Width, texture.Height);
         }
 
         public Size(int width, int height)
@@ -56,7 +55,7 @@ namespace VillageMelter.Base
         }
 
 
-        public override object Clone()
+        public object Clone()
         {
             return new Size(Width, Height);
         }

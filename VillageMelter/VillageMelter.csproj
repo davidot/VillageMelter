@@ -39,13 +39,14 @@
     <Compile Include="Base\Rotation.cs" />
     <Compile Include="Base\Size.cs" />
     <Compile Include="Base\Util.cs" />
-    <Compile Include="Level\Buildings\CityHall.cs" />
+    <Compile Include="Level\Buildings\TextureBuilding.cs" />
+    <Compile Include="Level\Buildings\TextureBuildingInstance.cs" />
     <Compile Include="VillageMelter.cs" />
     <Compile Include="Level\Buildings\Building.cs" />
     <Compile Include="Level\Buildings\BuildingInstance.cs" />
-    <Compile Include="Level\DefualtTerrain.cs" />
-    <Compile Include="Level\Level.cs" />
-    <Compile Include="Level\Terrain.cs" />
+    <Compile Include="Level\Terrains\DefualtTerrain.cs" />
+    <Compile Include="Level\World.cs" />
+    <Compile Include="Level\Terrains\Terrain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

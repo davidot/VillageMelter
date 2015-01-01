@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using VillageMelter.Level.Terrains;
+using VillageMelter.Level;
+using Microsoft.Xna.Framework.Content;
 
 namespace VillageMelter
 {
@@ -18,9 +21,9 @@ namespace VillageMelter
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        List<ContentManager> managers = new List<ContentManager>();
         SpriteFont font;
-        Level.Level level;
+        Level.World level;
 
         InputHandler input;
 
@@ -52,7 +55,7 @@ namespace VillageMelter
 
             input = new InputHandler(this);
             
-            Level.Terrain.Init();
+            Terrain.Init();
 
             base.Initialize();
         }
@@ -68,7 +71,7 @@ namespace VillageMelter
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             font = Content.Load<SpriteFont>("DorpBuilderFont");
-            level = new Level.Level(this.graphics.PreferredBackBufferWidth, this.graphics.PreferredBackBufferHeight);
+            level = new World(this.graphics.PreferredBackBufferWidth, this.graphics.PreferredBackBufferHeight,this);
         }
 
         /// <summary>
@@ -129,5 +132,23 @@ namespace VillageMelter
             spriteBatch.End();
             base.Draw(gameTime);
         }
+
+        public void Unload()
+        {
+            foreach(ContentManager manager in managers)
+            {
+                manager.Unload();
+            }
+
+            Content.Unload();
+        }
+
+        public ContentManager CreateNewContentManager()
+        {
+            ContentManager manager = new ContentManager(Services, "Content");
+            managers.Add(manager);
+            return manager;
+        }
+
     }
 }
