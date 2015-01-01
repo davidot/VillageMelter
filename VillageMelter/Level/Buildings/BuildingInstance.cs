@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace VillageMelter.Level.Buildings
 {
     public abstract class BuildingInstance
     {
 
-        protected Level Level
+        public Building BuildingType
         {
             get;
 
             private set;
-
         }
 
         public int X
@@ -46,18 +46,25 @@ namespace VillageMelter.Level.Buildings
             private set;
         }
 
-        public BuildingInstance(Level level, int x,int y,Rotation rot,Building b)
+        public BuildingInstance(Building bType, int x,int y,Rotation rot)
         {
-            this.Level = level;
+            this.BuildingType = bType;
             this.X = x;
             this.Y = y;
             this.Orientation = rot;
-            this.Bounds = b.GetSize().Rotate(rot);
+            this.Bounds = BuildingType.GetSize().Rotate(rot);
         }
+
+
 
         public static implicit operator Rectangle(BuildingInstance building)
         {
             return building.Bounds.CreateRectangle(building.X, building.Y);
+        }
+
+        public Texture2D GetImage()
+        {
+            return BuildingType.GetTexture();
         }
 
     }

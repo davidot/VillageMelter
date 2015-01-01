@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace VillageMelter.Level
+namespace VillageMelter.Level.Terrain
 {
     class DefualtTerrain : Terrain
     {

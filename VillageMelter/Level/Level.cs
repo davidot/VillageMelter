@@ -214,12 +214,6 @@ namespace VillageMelter.Level
             buildings.Add(b);
         }
 
-        public static Level operator +(Level l, BuildingInstance b)
-        {
-            l.Add(b);
-            return l;
-        }
-
 
 
         public bool HasTerrainType(Terrain search, Rectangle rect)

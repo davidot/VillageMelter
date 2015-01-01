@@ -12,11 +12,13 @@ namespace VillageMelter.Level.Buildings
     {
 
 
-        public abstract BuildingInstance CreateInstance();
+        public abstract BuildingInstance CreateInstance(int x, int y, Rotation orientation);
 
         public abstract bool CanPlace(Level level, Rectangle rect);
 
         public abstract Texture2D GetBuildingTexture();
+
+        public abstract Texture2D GetTexture();
 
         public abstract Size GetSize();
     }
