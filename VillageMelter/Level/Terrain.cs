@@ -12,23 +12,32 @@ namespace VillageMelter.Level
     {
         private static Dictionary<int, Terrain> terrains = new Dictionary<int, Terrain>();
 
-        private static Terrain _nullTerrain;
-        private static Terrain _dirt;
-        private static Terrain _grass;
-
         public static Terrain NullTerrain
         {
-            get { return _nullTerrain; }
+            get;
+
+            private set;
         }
 
         public static Terrain Dirt
         {
-            get { return _dirt; }
+            get;
+
+            private set;
         }
 
         public static Terrain Grass
         {
-            get { return _grass; }
+            get;
+
+            private set;
+        }
+
+        public static Terrain Water
+        {
+            get;
+
+            private set;
         }
 
         private static bool _init = false;
@@ -40,9 +49,10 @@ namespace VillageMelter.Level
                 return;
             }
             _init = true;
-            _nullTerrain = new DefualtTerrain(0,Color.Black);
-            _dirt = new DefualtTerrain(1, new Color[] { new Color(89, 61, 40), new Color(121, 86, 58) });
-            _grass = new DefualtTerrain(2, new Color[] { Color.Green, new Color(55,119,66) });
+            NullTerrain = new DefualtTerrain(0,Color.Black);
+            Dirt = new DefualtTerrain(1, new Color[] { new Color(89, 61, 40), new Color(121, 86, 58) });
+            Grass = new DefualtTerrain(2, new Color[] { Color.Green, new Color(55,119,66) });
+            Water = new DefualtTerrain(3, new Color[] { Color.DarkBlue, Color.Blue });
         }
 
 

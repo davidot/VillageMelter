@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
-namespace VillageMelter.Level
+namespace VillageMelter.Level.Buildings
 {
     public abstract class BuildingInstance
     {
@@ -31,22 +32,33 @@ namespace VillageMelter.Level
             private set;
         }
 
-        public Rotation Rotation
+        public Rotation Orientation
         {
             get;
 
             private set;
         }
 
-        public BuildingInstance(Level level, int x,int y,Rotation rot)
+        public Size Bounds
+        {
+            get;
+
+            private set;
+        }
+
+        public BuildingInstance(Level level, int x,int y,Rotation rot,Building b)
         {
             this.Level = level;
             this.X = x;
             this.Y = y;
-            this.Rotation = rot;
+            this.Orientation = rot;
+            this.Bounds = b.GetSize().Rotate(rot);
         }
 
-
+        public static implicit operator Rectangle(BuildingInstance building)
+        {
+            return building.Bounds.CreateRectangle(building.X, building.Y);
+        }
 
     }
 }

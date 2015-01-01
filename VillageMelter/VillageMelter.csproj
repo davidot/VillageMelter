@@ -35,7 +35,17 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game1.cs" />
+    <Compile Include="Base\InputHandler.cs" />
+    <Compile Include="Base\Rotation.cs" />
+    <Compile Include="Base\Size.cs" />
+    <Compile Include="Base\Util.cs" />
+    <Compile Include="Level\Buildings\CityHall.cs" />
+    <Compile Include="VillageMelter.cs" />
+    <Compile Include="Level\Buildings\Building.cs" />
+    <Compile Include="Level\Buildings\BuildingInstance.cs" />
+    <Compile Include="Level\DefualtTerrain.cs" />
+    <Compile Include="Level\Level.cs" />
+    <Compile Include="Level\Terrain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,6 +74,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VillageMelterContent\VillageMelterContent\VillageMelterContent.csproj">
+      <Project>{23a73885-e7ca-48dc-aa2c-eb088e262bf5}</Project>
+      <Name>VillageMelterContent</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

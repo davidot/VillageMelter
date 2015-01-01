@@ -8,6 +8,7 @@ using VillageMelter.Base;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
+using VillageMelter.Level.Buildings;
 
 namespace VillageMelter.Level
 {
@@ -42,6 +43,8 @@ namespace VillageMelter.Level
         int yScroll = 0;
 
         private int _zoom = 1;
+
+        Building test;
 
         private List<BuildingInstance> buildings = new List<BuildingInstance>();
 
@@ -82,6 +85,7 @@ namespace VillageMelter.Level
                     terrains[DataIndex][x, y] = rand.Next(2);
                 }
             }
+            LoadContent();
         }
 
         public Terrain GetTerrain(int x, int y)
@@ -134,9 +138,9 @@ namespace VillageMelter.Level
             int lastXTile = (xScroll + renderSize.Width) / terrainZoomSize;
             int lastYTile = (yScroll + renderSize.Height) / terrainZoomSize;
 
-            //TODO create rectangle form four render points
-
             Rectangle renderRect = Util.RectangleFromTwoPoints(firstXTile, firstYTile, lastXTile, lastYTile);
+
+
 
             for (int x = firstXTile; x <= lastXTile; x++)
             {
@@ -146,6 +150,15 @@ namespace VillageMelter.Level
                     spriteBatch.Draw(texture, new Rectangle((x - firstXTile) * terrainZoomSize - xScrollOff, (y - firstYTile) * terrainZoomSize - yScrollOff, terrainZoomSize, terrainZoomSize), GetColor(x, y));
                 }
             }
+
+            foreach(BuildingInstance building in buildings)
+            {
+                if(renderRect.Intersects(building))
+                {
+                    //todo render building
+                }
+            }
+
         }
 
         private int scrollChange = 4;
@@ -169,7 +182,13 @@ namespace VillageMelter.Level
             {
                 yScroll = Math.Min(Height * Zoom, yScroll + scrollChange);
             }
-
+            if (handler.IsLeftMouseDown())
+            {
+                Point p = handler.MousePosition();
+                int xPos = p.X / (TerrainSize * Zoom) - xScroll;
+                int yPos = p.Y / (TerrainSize * Zoom) - yScroll;
+                
+            }
             int scrollWheel = handler.ScrollWheelDifference();
             if (scrollWheel > 0)
             {
@@ -179,6 +198,7 @@ namespace VillageMelter.Level
             {
                 Zoom--;
             }
+            
 
         }
 
@@ -201,5 +221,20 @@ namespace VillageMelter.Level
         }
 
 
+
+        public bool HasTerrainType(Terrain search, Rectangle rect)
+        {
+            for (int x = rect.X; x < rect.X + rect.Width; x++)
+            {
+                for (int y = rect.Y; y < rect.Y + rect.Height; y++)
+                {
+                    if (GetTerrain(x, y) == search)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

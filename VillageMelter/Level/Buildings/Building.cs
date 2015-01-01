@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
-namespace VillageMelter.Level
+namespace VillageMelter.Level.Buildings
 {
     public abstract class Building
     {
@@ -13,7 +14,7 @@ namespace VillageMelter.Level
 
         public abstract BuildingInstance CreateInstance();
 
-        public abstract bool CanPlace(Level level, int x, int y);
+        public abstract bool CanPlace(Level level, Rectangle rect);
 
         public abstract Texture2D GetBuildingTexture();
 
