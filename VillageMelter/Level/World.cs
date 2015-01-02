@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace VillageMelter.Level
 {
-    public class World
+    public class World : GameComponent
     {
 
         public const int TerrainSize = 4;
@@ -66,7 +66,7 @@ namespace VillageMelter.Level
             }
         }
 
-        public World(int width, int height,VillageMelter game)
+        public World(int width, int height,VillageMelter game) : base(game)
         {
             this._width = width;
             this._height = height;
@@ -87,13 +87,15 @@ namespace VillageMelter.Level
                     terrains[DataIndex][x, y] = rand.Next(2);
                 }
             }
-            LoadContent(game);
+            LoadContent();
         }
 
         ContentManager _contentManager;
-        public void LoadContent(VillageMelter game)
+
+        public void LoadContent()
         {
-            _contentManager = game.CreateNewContentManager();
+            
+            _contentManager = new ContentManager(this.Game.Services,"Content");
             test = new TextureBuilding(_contentManager, "image/cityHall");
         }
 
@@ -164,7 +166,7 @@ namespace VillageMelter.Level
             {
                 if(renderRect.Intersects(building))
                 {
-                    spriteBatch.Draw(building.GetImage(), new Vector2((building.X - firstXTile) * terrainZoomSize - xScrollOff, (building.Y  - firstYTile) * terrainZoomSize - yScrollOff), null, Color.White, (float)((((float)building.Orientation) / 2.0) * Math.PI), new Vector2(building.GetImage().Width / 2, building.GetImage().Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
+                    spriteBatch.Draw(building.GetImage(), new Vector2((building.X - firstXTile) * terrainZoomSize - xScrollOff, (building.Y  - firstYTile) * terrainZoomSize - yScrollOff), null, Color.White, building.Orientation.ToGraphicRotation(), new Vector2(building.GetImage().Width / 2, building.GetImage().Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
                 }
             }
 
@@ -197,8 +199,6 @@ namespace VillageMelter.Level
                 int xPos = (p.X + xScroll) / (TerrainSize * Zoom);
                 int yPos = (p.Y + yScroll)/ (TerrainSize * Zoom);
                 Rotation r = (Rotation)new Random().Next(4) + 1;
-                Console.WriteLine("Xscroll=" + xScroll + ", Yscroll=" + yScroll);
-                Console.WriteLine("Position on screen:" + p.ToString() + " to position: " + xPos + " , " + yPos);
                 Rectangle placeRect = test.GetSize().Rotate(r).CreateRectangle(xPos,yPos);
                 if(test.CanPlace(this,placeRect))
                     Add(test.CreateInstance(xPos, yPos,r));
@@ -241,6 +241,11 @@ namespace VillageMelter.Level
                 }
             }
             return false;
+        }
+
+        public T LoadTexture<T>(string name)
+        {
+            return _contentManager.Load<T>(name);
         }
     }
 }
