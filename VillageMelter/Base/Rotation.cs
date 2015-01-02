@@ -7,7 +7,7 @@ namespace VillageMelter.Base
 {
     public enum Rotation
     {
-        NORTH,
+        NORTH = 1,
         EAST,
         SOUTH,
         WEST

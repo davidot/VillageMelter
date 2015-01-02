@@ -28,6 +28,7 @@ namespace VillageMelter
         InputHandler input;
 
         float scale = 1.0f;
+        Texture2D image;
 
         public VillageMelter()
             : base()
@@ -71,6 +72,7 @@ namespace VillageMelter
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             font = Content.Load<SpriteFont>("DorpBuilderFont");
+            image = Content.Load<Texture2D>("image/cityHall");
             level = new World(this.graphics.PreferredBackBufferWidth, this.graphics.PreferredBackBufferHeight,this);
         }
 
@@ -110,7 +112,7 @@ namespace VillageMelter
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.PointClamp,DepthStencilState.None,RasterizerState.CullCounterClockwise);
 
             Size currentSize = new Size(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 

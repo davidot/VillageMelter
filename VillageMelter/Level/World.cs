@@ -164,7 +164,7 @@ namespace VillageMelter.Level
             {
                 if(renderRect.Intersects(building))
                 {
-                    spriteBatch.Draw(building.GetImage(), new Rectangle(building.X - xScroll,building.Y - yScroll,building.Bounds.Width,building.Bounds.Height), Color.White);
+                    spriteBatch.Draw(building.GetImage(), new Vector2((building.X - firstXTile) * terrainZoomSize - xScrollOff, (building.Y  - firstYTile) * terrainZoomSize - yScrollOff), null, Color.White, (float)((((float)building.Orientation) / 2.0) * Math.PI), new Vector2(building.GetImage().Width / 2, building.GetImage().Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
                 }
             }
 
@@ -191,15 +191,17 @@ namespace VillageMelter.Level
             {
                 yScroll = Math.Min(Height * Zoom, yScroll + scrollChange);
             }
-            if (handler.IsLeftMouseDown())
+            if (handler.IsLeftMousePressed())
             {
                 Point p = handler.MousePosition();
-                int xPos = p.X / (TerrainSize * Zoom) - xScroll;
-                int yPos = p.Y / (TerrainSize * Zoom) - yScroll;
-                Rotation r = (Rotation)new Random().Next(4);
+                int xPos = (p.X + xScroll) / (TerrainSize * Zoom);
+                int yPos = (p.Y + yScroll)/ (TerrainSize * Zoom);
+                Rotation r = (Rotation)new Random().Next(4) + 1;
+                Console.WriteLine("Xscroll=" + xScroll + ", Yscroll=" + yScroll);
+                Console.WriteLine("Position on screen:" + p.ToString() + " to position: " + xPos + " , " + yPos);
                 Rectangle placeRect = test.GetSize().Rotate(r).CreateRectangle(xPos,yPos);
                 if(test.CanPlace(this,placeRect))
-                    Add(test.CreateInstance(xPos, xPos,r));
+                    Add(test.CreateInstance(xPos, yPos,r));
             }
             int scrollWheel = handler.ScrollWheelDifference();
             if (scrollWheel > 0)

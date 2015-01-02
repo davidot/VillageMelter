@@ -41,7 +41,7 @@ namespace VillageMelter.Level.Buildings
 
         public override bool CanPlace(World level, Rectangle rect)
         {
-            return level.HasTerrainType(Terrain.Water, rect);
+            return !level.HasTerrainType(Terrain.Water, rect);
         }
 
         public override BuildingInstance CreateInstance(int x, int y, Rotation orientation)
