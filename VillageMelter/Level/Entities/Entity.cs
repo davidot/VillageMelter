@@ -58,7 +58,7 @@ namespace VillageMelter.Level.Entities
             Y = y;
         }
 
-        public void AddedToWorld(World world)
+        public void AddToWorld(World world)
         {
             this.World = world;
             OnWorldAdd();
@@ -99,6 +99,11 @@ namespace VillageMelter.Level.Entities
         public abstract void Update();
 
         public abstract Size GetBounds();
+
+        public static implicit operator Rectangle(Entity e)
+        {
+            return e.Bounds.CreateRectangle(e.X, e.Y);
+        }
 
     }
 }

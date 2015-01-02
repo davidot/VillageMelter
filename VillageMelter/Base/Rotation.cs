@@ -13,11 +13,4 @@ namespace VillageMelter.Base
         WEST
     }
 
-    public static class Extensions
-    {
-        public static float ToGraphicRotation(this Rotation rot)
-        {
-            return (float)((((float)rot)/2) * Math.PI);
-        }
-    }
 }

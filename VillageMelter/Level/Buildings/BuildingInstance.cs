@@ -62,7 +62,7 @@ namespace VillageMelter.Level.Buildings
             return building.Bounds.CreateRectangle(building.X, building.Y);
         }
 
-        public Texture2D GetImage()
+        public Texture2D GetTexture()
         {
             return BuildingType.GetTexture();
         }

@@ -11,6 +11,7 @@ using System.Diagnostics;
 using VillageMelter.Level.Buildings;
 using VillageMelter.Level.Terrains;
 using Microsoft.Xna.Framework.Content;
+using VillageMelter.Level.Entities;
 
 namespace VillageMelter.Level
 {
@@ -48,7 +49,9 @@ namespace VillageMelter.Level
 
         Building test;
 
-        private List<BuildingInstance> buildings = new List<BuildingInstance>();
+        List<BuildingInstance> buildings = new List<BuildingInstance>();
+
+        List<Entity> entities = new List<Entity>();
 
         public int Zoom
         {
@@ -91,12 +94,15 @@ namespace VillageMelter.Level
         }
 
         ContentManager _contentManager;
+        Texture2D testImage;
 
         public void LoadContent()
         {
             
             _contentManager = new ContentManager(this.Game.Services,"Content");
             test = new TextureBuilding(_contentManager, "image/cityHall");
+            testImage = _contentManager.Load<Texture2D>("entity/player");
+            Add(new Player(10,10));
         }
 
         public Terrain GetTerrain(int x, int y)
@@ -166,9 +172,20 @@ namespace VillageMelter.Level
             {
                 if(renderRect.Intersects(building))
                 {
-                    spriteBatch.Draw(building.GetImage(), new Vector2((building.X - firstXTile) * terrainZoomSize - xScrollOff, (building.Y  - firstYTile) * terrainZoomSize - yScrollOff), null, Color.White, building.Orientation.ToGraphicRotation(), new Vector2(building.GetImage().Width / 2, building.GetImage().Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
+                    spriteBatch.Draw(building.GetTexture(), new Vector2((building.X - firstXTile) * terrainZoomSize - xScrollOff, (building.Y  - firstYTile) * terrainZoomSize - yScrollOff), null, Color.White, building.Orientation.ToGraphicRotation(), new Vector2(building.GetTexture().Width / 2, building.GetTexture().Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
                 }
             }
+
+            foreach (Entity entity in entities)
+            {
+                if (renderRect.Intersects(entity))
+                {
+                    Texture2D entityTexture = entity.GetTexture();
+                    spriteBatch.Draw(texture, new Vector2((entity.X - firstXTile) * terrainZoomSize - xScrollOff, (entity.Y - firstYTile) * terrainZoomSize - yScrollOff), null, Color.White, entity.Direction.ToGraphicRotation(), new Vector2(texture.Width / 2, texture.Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
+                }
+            }
+
+            spriteBatch.Draw(testImage, new Vector2(100, 100), Color.White);
 
         }
 
@@ -226,7 +243,11 @@ namespace VillageMelter.Level
             buildings.Add(b);
         }
 
-
+        public void Add(Entity entity)
+        {
+            entities.Add(entity);
+            entity.AddToWorld(this);
+        }
 
         public bool HasTerrainType(Terrains.Terrain search, Rectangle rect)
         {
@@ -247,5 +268,7 @@ namespace VillageMelter.Level
         {
             return _contentManager.Load<T>(name);
         }
+
+        
     }
 }

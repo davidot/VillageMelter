@@ -16,13 +16,14 @@ namespace VillageMelter.Level.Entities
         {
         }
 
-        public void OnWorldAdd()
+        public override void OnWorldAdd()
         {
             Texture2D texture = World.LoadTexture<Texture2D>("entity/player");
-
+            Texture2D[] textures = texture.SplitHorizontal(3).ToArray<Texture2D>();
+            animation = new Animation(textures, 12, textures[0]);
         }
 
-        public override Microsoft.Xna.Framework.Graphics.Texture2D GetTexture()
+        public override Texture2D GetTexture()
         {
             return animation.GetTexture();
         }
@@ -32,6 +33,10 @@ namespace VillageMelter.Level.Entities
             animation.Update();
         }
 
+        public override Size GetBounds()
+        {
+            return new Size(32, 32);
+        }
 
     }
 }
