@@ -25,7 +25,7 @@ namespace VillageMelter
         SpriteFont font;
         Level.World level;
 
-        InputHandler input;
+        internal InputHandler input;
 
         float scale = 1.0f;
         Texture2D image;

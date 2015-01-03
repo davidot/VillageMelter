@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using VillageMelter.Level.Entities;
 
 namespace VillageMelter.Level.Terrains
 {
@@ -49,10 +50,10 @@ namespace VillageMelter.Level.Terrains
                 return;
             }
             _init = true;
-            NullTerrain = new DefualtTerrain(0,Color.Black);
-            Dirt = new DefualtTerrain(1, new Color[] { new Color(89, 61, 40), new Color(121, 86, 58) });
-            Grass = new DefualtTerrain(2, new Color[] { Color.Green, new Color(55,119,66) });
-            Water = new DefualtTerrain(3, new Color[] { Color.DarkBlue, Color.Blue });
+            NullTerrain = new DefualtTerrain(0,Color.Pink,false);
+            Dirt = new DefualtTerrain(1, new Color[] { new Color(89, 61, 40), new Color(121, 86, 58) },true);
+            Grass = new DefualtTerrain(2, new Color[] { Color.Green, new Color(55,119,66) },true);
+            Water = new DefualtTerrain(3, new Color[] { Color.DarkBlue, Color.Blue },false);
         }
 
 
@@ -81,6 +82,8 @@ namespace VillageMelter.Level.Terrains
             }
             return NullTerrain;
         }
+
+        public abstract bool MayPass(Entity e, int data);
 
 
     }

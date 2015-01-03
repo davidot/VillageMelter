@@ -14,6 +14,10 @@ namespace VillageMelter.Level.Buildings
         }
 
 
+        public override void Update()
+        {
+        }
+
 
     }
 }

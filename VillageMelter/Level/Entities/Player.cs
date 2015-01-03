@@ -11,6 +11,7 @@ namespace VillageMelter.Level.Entities
     {
 
         Animation animation;
+        InputHandler input;
 
         public Player(int x, int y) : base(x,y)
         {
@@ -21,6 +22,9 @@ namespace VillageMelter.Level.Entities
             Texture2D texture = World.LoadTexture<Texture2D>("entity/player");
             Texture2D[] textures = texture.SplitHorizontal(3).ToArray<Texture2D>();
             animation = new Animation(textures, 12, textures[0]);
+            animation.Playing = true;
+            animation.Loop = true;
+            input = World.InputHandler;
         }
 
         public override Texture2D GetTexture()

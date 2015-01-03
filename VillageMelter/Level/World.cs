@@ -69,6 +69,13 @@ namespace VillageMelter.Level
             }
         }
 
+        public InputHandler InputHandler
+        {
+            get;
+
+            private set;
+        }
+
         public World(int width, int height,VillageMelter game) : base(game)
         {
             this._width = width;
@@ -91,6 +98,7 @@ namespace VillageMelter.Level
                 }
             }
             LoadContent();
+            InputHandler = game.input;
         }
 
         ContentManager _contentManager;
@@ -107,6 +115,8 @@ namespace VillageMelter.Level
 
         public Terrain GetTerrain(int x, int y)
         {
+            x /= TerrainSize;
+            y /= TerrainSize;
             if (InRange(x, y))
             {
                 return Terrain.get(terrains[TerrainIndex][x, y]);
@@ -116,6 +126,8 @@ namespace VillageMelter.Level
 
         public int GetData(int x, int y)
         {
+            x /= TerrainSize;
+            y /= TerrainSize;
             if (InRange(x, y))
             {
                 return terrains[DataIndex][x, y];
@@ -149,22 +161,24 @@ namespace VillageMelter.Level
             int xScrollOff = xScroll % terrainZoomSize;
             int yScrollOff = yScroll % terrainZoomSize;
 
-            int firstXTile = (xScroll) / terrainZoomSize;
-            int firstYTile = (yScroll) / terrainZoomSize;
+            int lastX = (xScroll + renderSize.Width);
+            int lastY = (yScroll + renderSize.Height);
 
-            int lastXTile = (xScroll + renderSize.Width) / terrainZoomSize;
-            int lastYTile = (yScroll + renderSize.Height) / terrainZoomSize;
+            int firstTileX = (xScroll /terrainZoomSize) * terrainZoomSize;
+            int firtsTileY = (yScroll / terrainZoomSize) * terrainZoomSize;
 
-            Rectangle renderRect = Util.RectangleFromTwoPoints(firstXTile, firstYTile, lastXTile, lastYTile);
+            int lastTileX = (lastX / terrainZoomSize) * terrainZoomSize;
+            int lastTileY = (lastY / terrainZoomSize) * terrainZoomSize;
+
+            Rectangle renderRect = Util.RectangleFromTwoPoints(xScroll, yScroll, lastX, lastY);
 
 
 
-            for (int x = firstXTile; x <= lastXTile; x++)
+            for (int x = firstTileX; x <= lastTileX; x += TerrainSize)
             {
-                for (int y = firstYTile; y <= lastYTile; y++)
+                for (int y = firtsTileY; y <= lastTileY; y += TerrainSize)
                 {
-
-                    spriteBatch.Draw(texture, new Rectangle((x - firstXTile) * terrainZoomSize - xScrollOff, (y - firstYTile) * terrainZoomSize - yScrollOff, terrainZoomSize, terrainZoomSize), GetColor(x, y));
+                    spriteBatch.Draw(texture, new Rectangle((x - firstTileX) - xScrollOff, (y - firtsTileY) - yScrollOff, terrainZoomSize, terrainZoomSize), GetColor(x, y));
                 }
             }
 
@@ -172,7 +186,7 @@ namespace VillageMelter.Level
             {
                 if(renderRect.Intersects(building))
                 {
-                    spriteBatch.Draw(building.GetTexture(), new Vector2((building.X - firstXTile) * terrainZoomSize - xScrollOff, (building.Y  - firstYTile) * terrainZoomSize - yScrollOff), null, Color.White, building.Orientation.ToGraphicRotation(), new Vector2(building.GetTexture().Width / 2, building.GetTexture().Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
+                    spriteBatch.Draw(building.GetTexture(), new Vector2((building.X - xScroll) * terrainZoomSize - xScrollOff, (building.Y - yScroll) * terrainZoomSize - yScrollOff), null, Color.White, building.Orientation.ToGraphicRotation(), new Vector2(building.GetTexture().Width / 2, building.GetTexture().Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
                 }
             }
 
@@ -181,35 +195,59 @@ namespace VillageMelter.Level
                 if (renderRect.Intersects(entity))
                 {
                     Texture2D entityTexture = entity.GetTexture();
-                    spriteBatch.Draw(texture, new Vector2((entity.X - firstXTile) * terrainZoomSize - xScrollOff, (entity.Y - firstYTile) * terrainZoomSize - yScrollOff), null, Color.White, entity.Direction.ToGraphicRotation(), new Vector2(texture.Width / 2, texture.Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
+                    spriteBatch.Draw(texture, new Vector2((entity.X - xScroll) * terrainZoomSize - xScrollOff, (entity.Y - yScroll) * terrainZoomSize - yScrollOff), null, Color.White, entity.Direction.ToGraphicRotation(), new Vector2(texture.Width / 2, texture.Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
                 }
             }
-
-            spriteBatch.Draw(testImage, new Vector2(100, 100), Color.White);
-
         }
+
+        public bool MayPass(Entity e, int x, int y)
+        {
+            return GetTerrain(x, y).MayPass(e, GetData(x, y));
+        }
+
+        public bool CanMove(Entity e, int dX, int dY)
+        {
+            if (dX != 0 && dY != 0)
+            {
+                Console.WriteLine("Cant move in two directions");
+                return false;
+            }
+            int maxD = 0;
+            int xTime = 0, yTime = 0;
+            if (dX > dY)
+            {
+                maxD = dX;
+                xTime = 1;
+            }
+            else
+            {
+                maxD = dY;
+                yTime = 1;
+            }
+            int currentX = e.X;
+            int currentY = e.Y;
+
+            for (int i = 0; i < maxD; i++)
+            {
+                currentX += xTime;
+                currentY += yTime;
+                if (!MayPass(e, currentX, currentY))
+                    return false;
+                if (GetBuildingsAt(currentX, currentY).Any())
+                    return false;
+            }
+
+            e.dX = Math.Max(e.dX, dX);
+            e.dY = Math.Max(e.dY, dY);
+            return true;
+        }
+
+
 
         private int scrollChange = 4;
 
         public void Update(InputHandler handler)
         {
-            if (handler.IsKeyDown(Keys.Left))
-            {
-                xScroll = Math.Max(0, xScroll - scrollChange);
-            }
-            if (handler.IsKeyDown(Keys.Right))
-            {
-                xScroll = Math.Min(Width * Zoom, xScroll + scrollChange);
-            }
-
-            if (handler.IsKeyDown(Keys.Up))
-            {
-                yScroll = Math.Max(0, yScroll - scrollChange);
-            }
-            if (handler.IsKeyDown(Keys.Down))
-            {
-                yScroll = Math.Min(Height * Zoom, yScroll + scrollChange);
-            }
             if (handler.IsLeftMousePressed())
             {
                 Point p = handler.MousePosition();
@@ -229,7 +267,10 @@ namespace VillageMelter.Level
             {
                 Zoom--;
             }
-            
+            foreach (BuildingInstance building in buildings)
+            {
+                building.Update();
+            }
 
         }
 
@@ -247,6 +288,16 @@ namespace VillageMelter.Level
         {
             entities.Add(entity);
             entity.AddToWorld(this);
+        }
+
+        public IEnumerable<BuildingInstance> GetBuildingsAt(int x, int y)
+        {
+            Point p = new Point(x, y);
+            foreach (BuildingInstance building in buildings)
+            {
+                if (building.Contains(p))
+                    yield return building;
+            }
         }
 
         public bool HasTerrainType(Terrains.Terrain search, Rectangle rect)
@@ -269,6 +320,5 @@ namespace VillageMelter.Level
             return _contentManager.Load<T>(name);
         }
 
-        
     }
 }

@@ -38,6 +38,20 @@ namespace VillageMelter.Level.Entities
             private set;
         }
 
+        public int dX
+        {
+            get;
+
+            internal set;
+        }
+
+        public int dY
+        {
+            get;
+
+            internal set;
+        }
+
         public bool Alive
         {
             get;
@@ -70,12 +84,9 @@ namespace VillageMelter.Level.Entities
         {
             if (dX != 0 && dY != 0)
             {
-                Move(dX, 0);
-                Move(dY, 0);
+                return Move(dX, 0) && Move(dY, 0);
             }
-
-
-            return true;
+            return World.CanMove(this, dX, dY);
         }
 
         public Rectangle GetSourceRectangle()

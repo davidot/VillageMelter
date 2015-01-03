@@ -5,7 +5,7 @@ using System.Text;
 
 namespace VillageMelter.Base
 {
-    public class Size : ICloneable
+    public struct Size : ICloneable
     {
 
 

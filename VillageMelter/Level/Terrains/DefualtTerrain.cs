@@ -16,13 +16,17 @@ namespace VillageMelter.Level.Terrains
             get { return _color; }
         }
 
-        public DefualtTerrain(int id,Color color) : base(id) {
+        bool _maypass;
+
+        public DefualtTerrain(int id,Color color,bool mayPass) : base(id) {
             this._color = new Color[]{color};
+            _maypass = mayPass;
         }
 
-        public DefualtTerrain(int id, Color[] color) : base(id)
+        public DefualtTerrain(int id, Color[] color,bool mayPass) : base(id)
         {
             this._color = color;
+            _maypass = mayPass;
         }
 
         public override Color GetColor(int data)
@@ -30,6 +34,10 @@ namespace VillageMelter.Level.Terrains
             return _color[data % _color.Length];
         }
 
+        public override bool MayPass(Entities.Entity e, int data)
+        {
+            return _maypass;
+        }
 
     }
 }

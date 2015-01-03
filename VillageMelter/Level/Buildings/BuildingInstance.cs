@@ -67,5 +67,13 @@ namespace VillageMelter.Level.Buildings
             return BuildingType.GetTexture();
         }
 
+
+        public bool Contains(Point p)
+        {
+            return p.X >= X && p.X <= X + Bounds.Width &&
+                    p.Y >= Y && p.Y <= Y + Bounds.Height;
+        }
+
+        public abstract void Update();
     }
 }
