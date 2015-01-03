@@ -15,7 +15,7 @@ namespace VillageMelter.Level.Entities
         {
             get;
 
-            private set;
+            internal set;
         }
 
         public Size Bounds
@@ -28,14 +28,14 @@ namespace VillageMelter.Level.Entities
         {
             get;
 
-            private set;
+            internal set;
         }
 
         public int Y
         {
             get;
 
-            private set;
+            internal set;
         }
 
         public int dX

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using VillageMelter.Level.Terrains;
 using VillageMelter.Level;
 using Microsoft.Xna.Framework.Content;
+using System;
 
 namespace VillageMelter
 {
@@ -52,9 +53,9 @@ namespace VillageMelter
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            Console.WriteLine("Initing");
 
-            input = new InputHandler(this);
+            
             
             Terrain.Init();
 
@@ -71,8 +72,11 @@ namespace VillageMelter
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            Console.WriteLine("Loading content");
+
             font = Content.Load<SpriteFont>("DorpBuilderFont");
             image = Content.Load<Texture2D>("image/cityHall");
+            input = new InputHandler(this);
             level = new World(this.graphics.PreferredBackBufferWidth, this.graphics.PreferredBackBufferHeight,this);
         }
 
@@ -97,7 +101,7 @@ namespace VillageMelter
 
             input.Update();
 
-            level.Update(input);
+            level.Update();
 
             // TODO: Add your update logic here
             scale += 0.01f;

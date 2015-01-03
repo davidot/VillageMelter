@@ -28,9 +28,9 @@ namespace VillageMelter.Level.Buildings
         }
 
 
-        public override Base.Size GetSize()
+        public override Size GetSize()
         {
-            return new Base.Size(_texture);
+            return Size.FromTexture(_texture);
         }
 
 

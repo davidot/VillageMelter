@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
 using System.Text;
@@ -8,29 +9,25 @@ namespace VillageMelter.Base
     public struct Size : ICloneable
     {
 
+        private int _width;
+        private int _height;
 
         public int Width
         {
-            get;
+            get { return _width; }
 
-            private set;
         }
 
         public int Height
         {
-            get;
+            get { return _height; }
 
-            private set;
         }
 
-        public Size(Microsoft.Xna.Framework.Graphics.Texture2D texture) : this(texture.Width, texture.Height)
+        public Size(int w, int h)
         {
-        }
-
-        public Size(int width, int height)
-        {
-            this.Width = width;
-            this.Height = height;
+            this._width = w;
+            this._height = h;
         }
 
         
@@ -58,6 +55,11 @@ namespace VillageMelter.Base
         public object Clone()
         {
             return new Size(Width, Height);
+        }
+
+        public static Size FromTexture(Texture2D texture)
+        {
+            return new Size(texture.Width, texture.Height);
         }
 
     }

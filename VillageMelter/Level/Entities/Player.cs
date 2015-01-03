@@ -24,7 +24,7 @@ namespace VillageMelter.Level.Entities
             animation = new Animation(textures, 12, textures[0]);
             animation.Playing = true;
             animation.Loop = true;
-            input = World.InputHandler;
+            input = World._input;
         }
 
         public override Texture2D GetTexture()
@@ -32,9 +32,31 @@ namespace VillageMelter.Level.Entities
             return animation.GetTexture();
         }
 
+        int moveSpeed = 1;
+
         public override void Update()
         {
             animation.Update();
+            bool left = input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left);
+            bool right = input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right);
+            bool up = input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up);
+            bool down = input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down);
+            if (left && !right)
+            {
+                Move(-moveSpeed, 0);
+            }
+            if (right && !left)
+            {
+                Move(moveSpeed, 0);
+            }
+            if (up && !down)
+            {
+                Move(0, -moveSpeed);
+            }
+            if (down && !up)
+            {
+                Move(0, moveSpeed);
+            }
         }
 
         public override Size GetBounds()

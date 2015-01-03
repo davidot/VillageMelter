@@ -69,11 +69,11 @@ namespace VillageMelter.Level
             }
         }
 
-        public InputHandler InputHandler
-        {
-            get;
+        public InputHandler _input;
 
-            private set;
+        public InputHandler GetInput()
+        {
+            return _input;
         }
 
         public World(int width, int height,VillageMelter game) : base(game)
@@ -97,8 +97,8 @@ namespace VillageMelter.Level
                     terrains[DataIndex][x, y] = rand.Next(2);
                 }
             }
+            _input = game.input;
             LoadContent();
-            InputHandler = game.input;
         }
 
         ContentManager _contentManager;
@@ -186,7 +186,7 @@ namespace VillageMelter.Level
             {
                 if(renderRect.Intersects(building))
                 {
-                    spriteBatch.Draw(building.GetTexture(), new Vector2((building.X - xScroll) * terrainZoomSize - xScrollOff, (building.Y - yScroll) * terrainZoomSize - yScrollOff), null, Color.White, building.Orientation.ToGraphicRotation(), new Vector2(building.GetTexture().Width / 2, building.GetTexture().Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
+                    spriteBatch.Draw(building.GetTexture(), new Vector2((building.X - xScroll), (building.Y - yScroll)), null, Color.White, building.Orientation.ToGraphicRotation(), new Vector2(building.GetTexture().Width / 2, building.GetTexture().Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
                 }
             }
 
@@ -195,7 +195,7 @@ namespace VillageMelter.Level
                 if (renderRect.Intersects(entity))
                 {
                     Texture2D entityTexture = entity.GetTexture();
-                    spriteBatch.Draw(texture, new Vector2((entity.X - xScroll) * terrainZoomSize - xScrollOff, (entity.Y - yScroll) * terrainZoomSize - yScrollOff), null, Color.White, entity.Direction.ToGraphicRotation(), new Vector2(texture.Width / 2, texture.Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
+                    spriteBatch.Draw(texture, new Vector2((entity.X - xScroll), (entity.Y - yScroll)), null, Color.White, entity.Direction.ToGraphicRotation(), new Vector2(texture.Width / 2, texture.Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
                 }
             }
         }
@@ -237,28 +237,25 @@ namespace VillageMelter.Level
                     return false;
             }
 
-            e.dX = Math.Max(e.dX, dX);
-            e.dY = Math.Max(e.dY, dY);
+            e.dX += dX;
+            e.dY += dY;
             return true;
         }
 
 
-
-        private int scrollChange = 4;
-
-        public void Update(InputHandler handler)
+        public void Update()
         {
-            if (handler.IsLeftMousePressed())
+            if (_input.IsLeftMousePressed())
             {
-                Point p = handler.MousePosition();
-                int xPos = (p.X + xScroll) / (TerrainSize * Zoom);
-                int yPos = (p.Y + yScroll)/ (TerrainSize * Zoom);
+                Point p = _input.MousePosition();
+                int xPos = (p.X + xScroll);
+                int yPos = (p.Y + yScroll);
                 Rotation r = (Rotation)new Random().Next(4) + 1;
                 Rectangle placeRect = test.GetSize().Rotate(r).CreateRectangle(xPos,yPos);
                 if(test.CanPlace(this,placeRect))
                     Add(test.CreateInstance(xPos, yPos,r));
             }
-            int scrollWheel = handler.ScrollWheelDifference();
+            int scrollWheel = _input.ScrollWheelDifference();
             if (scrollWheel > 0)
             {
                 Zoom++;
@@ -270,6 +267,40 @@ namespace VillageMelter.Level
             foreach (BuildingInstance building in buildings)
             {
                 building.Update();
+            }
+            foreach (Entity entity in entities)
+            {
+                entity.Update();
+                if (entity.dX != 0)
+                {
+                    if (entity.dX > 0)
+                    {
+                        entity.X++;
+                        entity.dX--;
+                        entity.Direction = Rotation.EAST;
+                    }
+                    else if (entity.dX < 0)
+                    {
+                        entity.X--;
+                        entity.dX++;
+                        entity.Direction = Rotation.WEST;
+                    }
+                }
+                if (entity.dY != 0)
+                {
+                    if (entity.dY > 0)
+                    {
+                        entity.Y++;
+                        entity.dY--;
+                        entity.Direction = Rotation.SOUTH;
+                    }
+                    else if (entity.dY < 0)
+                    {
+                        entity.Y--;
+                        entity.dY++;
+                        entity.Direction = Rotation.NORTH;
+                    }
+                }
             }
 
         }
