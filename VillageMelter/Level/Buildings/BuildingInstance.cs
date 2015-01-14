@@ -20,16 +20,12 @@ namespace VillageMelter.Level.Buildings
 
         public int X
         {
-            get;
-
-            private set;
+            get { return Bounds.X; }
         }
 
         public int Y
         {
-            get;
-
-            private set;
+            get { return Bounds.Y; }
         }
 
         public Rotation Orientation
@@ -39,7 +35,7 @@ namespace VillageMelter.Level.Buildings
             private set;
         }
 
-        public Size Bounds
+        public Rectangle Bounds
         {
             get;
 
@@ -49,17 +45,15 @@ namespace VillageMelter.Level.Buildings
         public BuildingInstance(Building bType, int x,int y,Rotation rot)
         {
             this.BuildingType = bType;
-            this.X = x;
-            this.Y = y;
             this.Orientation = rot;
-            this.Bounds = BuildingType.GetSize().Rotate(rot);
+            this.Bounds = BuildingType.GetSize().Rotate(rot).CreateRectangle(x,y); //Get the size of the building, rotate it and add the coordinates
         }
 
 
 
         public static explicit operator Rectangle(BuildingInstance building)
         {
-            return building.Bounds.CreateRectangle(building.X, building.Y);
+            return building.Bounds;
         }
 
         public Texture2D GetTexture()

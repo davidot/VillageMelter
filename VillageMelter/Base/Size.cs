@@ -72,6 +72,21 @@ namespace VillageMelter.Base
             return new Size(r.Width, r.Height);
         }
 
+        public Rectangle ToRectangle()
+        {
+            return new Rectangle(0, 0, Width, Height);
+        }
+
+        public static Rectangle ToRectangle(Size s)
+        {
+            return s.ToRectangle();
+        }
+
+        public static explicit operator Rectangle(Size s)
+        {
+            return ToRectangle(s);
+        }
+
         public static explicit operator Size(Rectangle r)
         {
             return FromRectangle(r);
