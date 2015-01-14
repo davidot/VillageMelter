@@ -186,7 +186,7 @@ namespace VillageMelter.Level
             {
                 if(renderRect.Intersects((Rectangle)building))
                 {
-                    spriteBatch.Draw(building.GetTexture(), new Vector2((building.X - xScroll), (building.Y - yScroll)), null, Color.White, building.Orientation.ToGraphicRotation(), new Vector2(building.GetTexture().Width / 2, building.GetTexture().Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
+                    spriteBatch.Draw(building.GetTexture(), new Vector2((building.X - xScroll) - building.Bounds.Width/2, (building.Y - yScroll) - building.Bounds.Height/2), null, Color.White, building.Orientation.ToGraphicRotation(), new Vector2(building.GetTexture().Width / 2, building.GetTexture().Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
                 }
             }
 
@@ -195,7 +195,7 @@ namespace VillageMelter.Level
                 if (renderRect.Intersects((Rectangle)entity))
                 {
                     Texture2D entityTexture = entity.GetTexture();
-                    spriteBatch.Draw(entityTexture, new Vector2((entity.X - xScroll), (entity.Y - yScroll)), null, Color.White, 0f, new Vector2(texture.Width / 2, texture.Height / 2), (float)Zoom, entity.Direction == Rotation.WEST ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 1.0f);
+                    spriteBatch.Draw(entityTexture, new Vector2((entity.X - xScroll) * terrainZoomSize, (entity.Y - yScroll) * terrainZoomSize), null, Color.White, 0f, new Vector2(texture.Width / 2, texture.Height / 2), (float)Zoom, entity.Direction == Rotation.WEST ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 1.0f);
                 }
             }
         }
