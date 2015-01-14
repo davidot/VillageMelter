@@ -10,8 +10,6 @@ namespace VillageMelter.Base
     public static class Extensions
     {
 
-
-
         #region Image extensions
         public static Texture2D GetPartOf(this Texture2D texture, Rectangle rect)
         {
@@ -40,16 +38,7 @@ namespace VillageMelter.Base
                 yield return texture.GetPartOf(new Rectangle(0, y, texture.Width, timesHeight));
             }
         }
-
         #endregion
-
-
-
-        public static float ToGraphicRotation(this Rotation rot)
-        {
-            return (float)((((float)rot) / 2) * Math.PI);
-        }
-
 
 
     }

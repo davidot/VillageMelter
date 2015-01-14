@@ -29,8 +29,6 @@ namespace VillageMelter.Level
 
         private int _height;
 
-
-
         public int Height
         {
             get { return this._height; }
@@ -195,7 +193,7 @@ namespace VillageMelter.Level
                 if (renderRect.Intersects(entity))
                 {
                     Texture2D entityTexture = entity.GetTexture();
-                    spriteBatch.Draw(texture, new Vector2((entity.X - xScroll), (entity.Y - yScroll)), null, Color.White, entity.Direction.ToGraphicRotation(), new Vector2(texture.Width / 2, texture.Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
+                    spriteBatch.Draw(entityTexture, new Vector2((entity.X - xScroll), (entity.Y - yScroll)), null, Color.White, 0f, new Vector2(texture.Width / 2, texture.Height / 2), (float)Zoom, entity.Direction == Rotation.WEST ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 1.0f);
                 }
             }
         }
@@ -245,7 +243,7 @@ namespace VillageMelter.Level
 
         public void Update()
         {
-            if (_input.IsLeftMousePressed())
+            if (_input.IsLeftMousePressed() || _input.IsRightButtonDown())
             {
                 Point p = _input.MousePosition();
                 int xPos = (p.X + xScroll);
@@ -307,7 +305,8 @@ namespace VillageMelter.Level
 
         public void Center(Point point, Size renderSize)
         {
-            //todo
+            int maxWidthTiles = (renderSize.Width + 31) / 32;
+            int maxHeightTiles = (renderSize.Height + 31) / 32;
         }
 
         public void Add(BuildingInstance b)

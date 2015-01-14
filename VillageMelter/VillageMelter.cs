@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using VillageMelter.Level.Terrains;
 using VillageMelter.Level;
 using Microsoft.Xna.Framework.Content;
+using System.Linq;
 using System;
 
 namespace VillageMelter
@@ -30,6 +31,7 @@ namespace VillageMelter
 
         float scale = 1.0f;
         Texture2D image;
+        Texture2D[] players;
 
         public VillageMelter()
             : base()
@@ -41,7 +43,7 @@ namespace VillageMelter
             graphics.PreferredBackBufferHeight = DefaultHeight;
 
             this.IsMouseVisible = true;
-            this.Window.Title = "Dorp builder";
+            this.Window.Title = "Village melter";
             this.Window.AllowUserResizing = true;
         }
 
@@ -74,8 +76,16 @@ namespace VillageMelter
 
             Console.WriteLine("Loading content");
 
+            //Initial content
+
             font = Content.Load<SpriteFont>("DorpBuilderFont");
             image = Content.Load<Texture2D>("image/cityHall");
+
+            Texture2D texture = Content.Load<Texture2D>("entity/player");
+            players = texture.SplitHorizontal(3).ToArray<Texture2D>();
+
+            //Instances
+
             input = new InputHandler(this);
             level = new World(this.graphics.PreferredBackBufferWidth, this.graphics.PreferredBackBufferHeight,this);
         }

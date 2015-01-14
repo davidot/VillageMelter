@@ -13,6 +13,8 @@ namespace VillageMelter.Level.Entities
         Animation animation;
         InputHandler input;
 
+        Size _bounds;
+
         public Player(int x, int y) : base(x,y)
         {
         }
@@ -24,6 +26,7 @@ namespace VillageMelter.Level.Entities
             animation = new Animation(textures, 12, textures[0]);
             animation.Playing = true;
             animation.Loop = true;
+            _bounds = animation.GetMaxBounds();
             input = World._input;
         }
 
@@ -61,7 +64,7 @@ namespace VillageMelter.Level.Entities
 
         public override Size GetBounds()
         {
-            return new Size(32, 32);
+            return _bounds;
         }
 
     }

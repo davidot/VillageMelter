@@ -88,7 +88,16 @@ namespace VillageMelter.Base
             return textures[frame];
         }
 
-
+        public Size GetMaxBounds()
+        {
+            int maxWidth = 0;
+            int maxHeight = 0;
+            foreach(Texture2D texture in textures) {
+                maxWidth = Math.Max(texture.Width, maxWidth);
+                maxHeight = Math.Max(texture.Height, maxHeight);
+            }
+            return new Size(maxWidth, maxHeight);
+        }
 
     }
 }
