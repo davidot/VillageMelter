@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Base\Animation.cs" />
     <Compile Include="Base\Extensions.cs" />
+    <Compile Include="Base\FrameRateCounter.cs" />
     <Compile Include="Base\InputHandler.cs" />
     <Compile Include="Base\Rotation.cs" />
     <Compile Include="Base\Size.cs" />

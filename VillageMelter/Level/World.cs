@@ -79,6 +79,8 @@ namespace VillageMelter.Level
             this._width = width;
             this._height = height;
 
+            _zoom = 3;
+
             terrains = new int[2][,];
             for (int i = 0; i < terrains.Length; i++)
             {
@@ -156,33 +158,33 @@ namespace VillageMelter.Level
             Texture2D texture = new Texture2D(graphics, 1, 1, false, SurfaceFormat.Color);
             texture.SetData<Color>(new Color[] { Color.White });
 
-            int xScrollOff = xScroll % terrainZoomSize;
-            int yScrollOff = yScroll % terrainZoomSize;
+            int renderTileWidth = (renderSize.Width + terrainZoomSize - 1) / terrainZoomSize;
+            int renderTileHeight = (renderSize.Height + terrainZoomSize - 1) / terrainZoomSize;
 
-            int lastX = (xScroll + renderSize.Width);
-            int lastY = (yScroll + renderSize.Height);
+            int subXScroll = xScroll % TerrainSize;
+            int subYScroll = yScroll % TerrainSize;
 
-            int firstTileX = (xScroll /terrainZoomSize) * terrainZoomSize;
-            int firtsTileY = (yScroll / terrainZoomSize) * terrainZoomSize;
+            int firstTileX = xScroll / TerrainSize;
+            int firstTileY = yScroll / TerrainSize;
 
-            int lastTileX = (lastX / terrainZoomSize) * terrainZoomSize;
-            int lastTileY = (lastY / terrainZoomSize) * terrainZoomSize;
+            int lastX = firstTileX + renderTileWidth;
+            int lastY = firstTileY + renderTileHeight;
 
-            Rectangle renderRect = Util.RectangleFromTwoPoints(xScroll, yScroll, lastX, lastY);
+            Console.WriteLine("Render size = " + renderSize);
 
+            Rectangle renderRect = Util.RectangleFromTwoPoints(xScroll, yScroll, xScroll + renderSize.Width, renderSize.Height);
 
-
-            for (int x = firstTileX; x <= lastTileX; x += TerrainSize)
+            for (int x = firstTileX; x <= lastX; x++)
             {
-                for (int y = firtsTileY; y <= lastTileY; y += TerrainSize)
+                for (int y = firstTileY; y <= lastY; y++)
                 {
-                    spriteBatch.Draw(texture, new Rectangle((x - firstTileX) - xScrollOff, (y - firtsTileY) - yScrollOff, terrainZoomSize, terrainZoomSize), GetColor(x, y));
+                    spriteBatch.Draw(texture, new Rectangle((x * terrainZoomSize - firstTileX) - subXScroll, (y * terrainZoomSize - firstTileY) - subYScroll, terrainZoomSize, terrainZoomSize), GetColor(x * TerrainSize, y * TerrainSize));
                 }
             }
 
             foreach(BuildingInstance building in buildings)
             {
-                if(renderRect.Intersects(building))
+                if(renderRect.Intersects((Rectangle)building))
                 {
                     spriteBatch.Draw(building.GetTexture(), new Vector2((building.X - xScroll), (building.Y - yScroll)), null, Color.White, building.Orientation.ToGraphicRotation(), new Vector2(building.GetTexture().Width / 2, building.GetTexture().Height / 2), (float)Zoom, SpriteEffects.None, 1.0f);
                 }
@@ -190,7 +192,7 @@ namespace VillageMelter.Level
 
             foreach (Entity entity in entities)
             {
-                if (renderRect.Intersects(entity))
+                if (renderRect.Intersects((Rectangle)entity))
                 {
                     Texture2D entityTexture = entity.GetTexture();
                     spriteBatch.Draw(entityTexture, new Vector2((entity.X - xScroll), (entity.Y - yScroll)), null, Color.White, 0f, new Vector2(texture.Width / 2, texture.Height / 2), (float)Zoom, entity.Direction == Rotation.WEST ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 1.0f);

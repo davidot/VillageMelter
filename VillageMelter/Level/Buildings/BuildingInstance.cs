@@ -57,7 +57,7 @@ namespace VillageMelter.Level.Buildings
 
 
 
-        public static implicit operator Rectangle(BuildingInstance building)
+        public static explicit operator Rectangle(BuildingInstance building)
         {
             return building.Bounds.CreateRectangle(building.X, building.Y);
         }

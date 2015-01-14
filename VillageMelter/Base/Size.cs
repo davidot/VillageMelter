@@ -57,10 +57,25 @@ namespace VillageMelter.Base
             return new Size(Width, Height);
         }
 
+        public override string ToString()
+        {
+            return "VillageMelter.Base.Size[Width=" + Width + ",Height=" + Height + "]";
+        }
+            
         public static Size FromTexture(Texture2D texture)
         {
             return new Size(texture.Width, texture.Height);
         }
+        
+        public static Size FromRectangle(Rectangle r)
+        {
+            return new Size(r.Width, r.Height);
+        }
 
+        public static explicit operator Size(Rectangle r)
+        {
+            return FromRectangle(r);
+        }
+             
     }
 }

@@ -42,9 +42,11 @@ namespace VillageMelter
             graphics.PreferredBackBufferWidth = DefaultWidth;
             graphics.PreferredBackBufferHeight = DefaultHeight;
 
+
             this.IsMouseVisible = true;
             this.Window.Title = "Village melter";
             this.Window.AllowUserResizing = true;
+            Components.Add(new FrameRateCounter(this));
         }
 
         /// <summary>
@@ -88,6 +90,12 @@ namespace VillageMelter
 
             input = new InputHandler(this);
             level = new World(this.graphics.PreferredBackBufferWidth, this.graphics.PreferredBackBufferHeight,this);
+
+
+            //graphics.ToggleFullScreen();
+            //graphics.IsFullScreen = true;
+            //graphics.ApplyChanges();
+
         }
 
         /// <summary>
@@ -128,7 +136,12 @@ namespace VillageMelter
             
             spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.PointClamp,DepthStencilState.None,RasterizerState.CullCounterClockwise);
 
-            Size currentSize = new Size(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+
+            Size currentSize = (Size) GraphicsDevice.Viewport.Bounds;
+
+            //Size currentSize = new Size(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+            
+            //Size currentSize = new Size(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             //foreach (Vector2 loc in buildingLocation)
             //{

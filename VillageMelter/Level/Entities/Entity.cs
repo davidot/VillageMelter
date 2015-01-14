@@ -111,7 +111,7 @@ namespace VillageMelter.Level.Entities
 
         public abstract Size GetBounds();
 
-        public static implicit operator Rectangle(Entity e)
+        public static explicit operator Rectangle(Entity e)
         {
             return e.Bounds.CreateRectangle(e.X, e.Y);
         }
