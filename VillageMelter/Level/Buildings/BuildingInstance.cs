@@ -62,7 +62,7 @@ namespace VillageMelter.Level.Buildings
         }
 
 
-        public bool Contains(Point p)
+        public bool BlockEntity(Point p)
         {
             return p.X >= X && p.X <= X + Bounds.Width &&
                     p.Y >= Y && p.Y <= Y + Bounds.Height;

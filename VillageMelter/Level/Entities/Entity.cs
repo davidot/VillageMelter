@@ -80,13 +80,15 @@ namespace VillageMelter.Level.Entities
 
         public abstract void OnWorldAdd();
 
-        public bool Move(int dX, int dY)
+        public void Move(int dX, int dY)
         {
             if (dX != 0 && dY != 0)
             {
-                return Move(dX, 0) && Move(dY, 0);
+                Move(dX, 0);
+                Move(0, dY);
+                return;
             }
-            return World.CanMove(this, dX, dY);
+            World.CanMove(this, dX, dY);
         }
 
         public Rectangle GetSourceRectangle()

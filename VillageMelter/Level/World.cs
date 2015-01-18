@@ -221,12 +221,12 @@ namespace VillageMelter.Level
             return GetTerrain(x, y).MayPass(e, GetData(x, y));
         }
 
-        public bool CanMove(Entity e, int dX, int dY)
+        public void CanMove(Entity e, int dX, int dY)
         {
             if (dX != 0 && dY != 0)
             {
                 Console.WriteLine("Cant move in two directions");
-                return false;
+                return;
             }
             int maxD = 0;
             int xTime = 0, yTime = 0;
@@ -246,8 +246,8 @@ namespace VillageMelter.Level
 
             int currentXSide = currentX + e.Bounds.Width;
             int currentYSide = currentX + e.Bounds.Height;
-
-            for (int i = 0; i < maxD; i++)
+            int i = 0;
+            for (i = 0; i < maxD; i++)
             {
                 currentX += xTime;
                 currentY += yTime;
@@ -256,24 +256,22 @@ namespace VillageMelter.Level
                 if (!MayPass(e, currentX, currentY) || !MayPass(e, currentXSide, currentYSide))
                 {
                     Console.WriteLine("Blocked by tile");
-                    return false;
-                }
-                List<BuildingInstance> buildings = new List<BuildingInstance>();
-                buildings.AddRange(GetBuildingsAt(currentX, currentY));
-                buildings.AddRange(GetBuildingsAt(currentXSide, currentYSide));
 
-                if (buildings.Any())
+                    break;
+                }
+                Point[] points = new Point[] { new Point(currentX, currentY), new Point(currentX, currentYSide), new Point(currentXSide, currentY), new Point(currentXSide, currentYSide) };
+
+                if (HasBuildingAtPoints(points))
                 {
                     Console.WriteLine("Blocked by building");
-                    Console.WriteLine("Entity " + e.GetType().Name + ":[x=" + e.X + ",y=" + e.Y + ",width=" + e.Bounds.Width + ",height=" + e.Bounds.Height + " blocked by " + buildings.First().Bounds.ToString());
-                    return false;
+
+                    break;
                 }
 
             }
 
-            e.dX += dX;
-            e.dY += dY;
-            return true;
+            e.dX += i * xTime;
+            e.dY += i * yTime;
         }
 
 
@@ -290,13 +288,15 @@ namespace VillageMelter.Level
                     Add(test.CreateInstance(xPos, yPos,r));
             }
             int scrollWheel = _input.ScrollWheelDifference();
+            scrollWheel /= 120; //TODO check if its different with different mices
             if (scrollWheel > 0)
             {
-                Zoom++;
+                Zoom+= (int)Math.Sqrt(scrollWheel);
             }
             if (scrollWheel < 0 && Zoom > 1)
             {
-                Zoom--;
+                int tempZoom = Zoom - (int)Math.Sqrt(Math.Abs(scrollWheel));
+                Zoom = Math.Max(tempZoom, 1);
             }
             foreach (BuildingInstance building in buildings)
             {
@@ -367,9 +367,40 @@ namespace VillageMelter.Level
             Point p = new Point(x, y);
             foreach (BuildingInstance building in buildings)
             {
-                if (building.Contains(p))
+                if (building.BlockEntity(p))
+                {
                     yield return building;
+                }
             }
+        }
+
+        public IEnumerable<BuildingInstance> GetBuildingsAtPoints(params Point[] points)
+        {
+            foreach (BuildingInstance building in buildings)
+            {
+                foreach (Point point in points)
+                {
+                    if (building.BlockEntity(point))
+                    {
+                        yield return building;
+                    }
+                }
+            }
+        }
+
+        public bool HasBuildingAtPoints(params Point[] points)
+        {
+            foreach (BuildingInstance building in buildings)
+            {
+                foreach (Point point in points)
+                {
+                    if (building.BlockEntity(point))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         public bool HasTerrainType(Terrains.Terrain search, Rectangle rect)
