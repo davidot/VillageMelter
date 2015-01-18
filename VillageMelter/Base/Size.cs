@@ -43,11 +43,11 @@ namespace VillageMelter.Base
             {
                 case Rotation.EAST:
                 case Rotation.WEST:
-                    return new Size(Height, Width);
+                    return (Size)Clone();
                 case Rotation.NORTH:
                 case Rotation.SOUTH:
                 default:
-                    return (Size)Clone();
+                    return new Size(Height, Width);
             }
         }
 

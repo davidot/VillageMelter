@@ -38,6 +38,14 @@ namespace VillageMelter.Base
                 yield return texture.GetPartOf(new Rectangle(0, y, texture.Width, timesHeight));
             }
         }
+
+        public static void DrawRectangle(this SpriteBatch batch,Texture2D t, GraphicsDevice device, Rectangle r, Color color,int width)
+        {
+            batch.Draw(t, new Rectangle(r.Left, r.Top, width, r.Height), color); // Left
+            batch.Draw(t, new Rectangle(r.Right, r.Top, width, r.Height), color); // Right
+            batch.Draw(t, new Rectangle(r.Left, r.Top, r.Width, width), color); // Top
+            batch.Draw(t, new Rectangle(r.Left, r.Bottom, r.Width, width), color); // Bottom
+        }
         #endregion
 
 

@@ -29,10 +29,6 @@ namespace VillageMelter
 
         internal InputHandler input;
 
-        float scale = 1.0f;
-        Texture2D image;
-        Texture2D[] players;
-
         public VillageMelter()
             : base()
         {
@@ -81,10 +77,6 @@ namespace VillageMelter
             //Initial content
 
             font = Content.Load<SpriteFont>("DorpBuilderFont");
-            image = Content.Load<Texture2D>("image/cityHall");
-
-            Texture2D texture = Content.Load<Texture2D>("entity/player");
-            players = texture.SplitHorizontal(3).ToArray<Texture2D>();
 
             //Instances
 
@@ -122,7 +114,6 @@ namespace VillageMelter
             level.Update();
 
             // TODO: Add your update logic here
-            scale += 0.01f;
             base.Update(gameTime);
         }
 
@@ -136,27 +127,9 @@ namespace VillageMelter
             
             spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.PointClamp,DepthStencilState.None,RasterizerState.CullCounterClockwise);
 
-
             Size currentSize = (Size) GraphicsDevice.Viewport.Bounds;
-
-            //Size currentSize = new Size(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
             
-            //Size currentSize = new Size(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-
-            //foreach (Vector2 loc in buildingLocation)
-            //{
-                //spriteBatch.Draw(image, new Vector2(loc.X - image.Width / 2, loc.Y - image.Height / 2), Color.White);
-            //}
-
-            //spriteBatch.Draw(image, new Vector2(mouseLocation.X-image.Width/2, mouseLocation.Y-image.Height/2), Color.White);
-            
-            //spriteBatch.DrawString(font, text, new Vector2(x, 150), Color.Black,1f,middle,1f,SpriteEffects.None,1f);
-            //spriteBatch.DrawString(font, rotation + " f", new Vector2(250, 250), Color.Chocolate);
-            //spriteBatch.DrawString(font, gameTime.ElapsedGameTime.TotalMilliseconds + "", new Vector2(300, 300), Color.DarkMagenta);
-            //spriteBatch.DrawString(font, time + "", new Vector2(500, 300), Color.DarkMagenta);
             level.Render(spriteBatch,graphics.GraphicsDevice,currentSize);
-
-            spriteBatch.DrawString(font, "This is a string", new Vector2(10, 10), Color.Black);
 
             spriteBatch.End();
             base.Draw(gameTime);
