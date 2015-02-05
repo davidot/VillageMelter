@@ -35,7 +35,7 @@ namespace VillageMelter.Level.Entities
             return animation.GetTexture();
         }
 
-        int moveSpeed = 3;
+        int moveSpeed = 12;
 
         public override void Update()
         {

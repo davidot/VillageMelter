@@ -288,7 +288,7 @@ namespace VillageMelter.Level
                     Add(test.CreateInstance(xPos, yPos,r));
             }
             int scrollWheel = _input.ScrollWheelDifference();
-            scrollWheel /= 120; //TODO check if its different with different mices
+            scrollWheel /= 120; //TODO check if its different for different mices
             if (scrollWheel > 0)
             {
                 Zoom+= (int)Math.Sqrt(scrollWheel);
@@ -337,8 +337,8 @@ namespace VillageMelter.Level
                 }
                 if (entity is Player)
                 {
-                    xScroll = Math.Max(0, Math.Min(Width, entity.X - LastRenderSize.Width / (2 * Zoom)));
-                    yScroll = Math.Max(0, Math.Min(Height, entity.Y - LastRenderSize.Height / (2 * Zoom)));
+                    xScroll = Math.Max(0, entity.X - LastRenderSize.Width / 2 * Zoom);
+                    yScroll = Math.Max(0, entity.Y - LastRenderSize.Height / 2 * Zoom);
                 }
                 
             }
